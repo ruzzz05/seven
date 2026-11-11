@@ -2,17 +2,14 @@
 
 Puzzle aritmético en Flutter (reescritura de una beta de Unity cuyo proyecto se perdió). Cuatro números; se operan de dos en dos hasta que queda uno, que debe ser 7. La puntuación es el tiempo. Modos normal y hardcore. Solo vertical. Objetivo: Google Play, luego App Store.
 
-## Tarea en curso
+## Estado del estilo
 
-**Implementar en Flutter el estilo visual aprobado C6 «Negro y lima».** Lee primero [`docs/07-Estilo-C6.md`](docs/07-Estilo-C6.md): tiene los tokens exactos, los componentes, la referencia visual y lo que aún no está diseñado.
+Estilo **C6 «Negro y lima»** implementado en toda la app (`lib/app/c6.dart`, `lib/app/theme.dart`, `lib/ui/c6_widgets.dart`). Spec: [`docs/07-Estilo-C6.md`](docs/07-Estilo-C6.md). Sprites de la beta y fuente pixel retirados de la UI.
 
-Estado del código frente a ese estilo:
-
-- La UI actual (`lib/app/theme.dart`, `lib/app/pixel_widgets.dart`, `lib/features/**`) usa un estilo **descartado**: sprites de la beta (`assets/images/`, `lib/app/assets.dart`) y fuente pixel. Hay que sustituirlo; no adaptarlo.
-- La pantalla de juego actual muestra un texto de pista (`hint`) bajo la cabecera. El estilo aprobado **no** lleva barra ni texto de operación en curso.
-- La lógica (`packages/seven_engine`, `lib/features/game/game_notifier.dart`) está bien y probada; el rediseño no debería tocarla.
-- `test/ui/assets_test.dart` y los golden de `test/ui/goldens/` verifican el estilo viejo: actualizarlos como parte del cambio.
-- Solo la pantalla de partida está diseñada. El resto de pantallas y el color del modo hardcore se proponen y se enseñan al autor antes de darlos por buenos.
+Pendiente de decisión con el autor (no inventar):
+- Color del modo hardcore (hoy igual que normal).
+- Pantalla de error de movimiento inválido (hoy solo el `hint` de texto, no visible).
+- Formato del cronómetro: décimas (maqueta) o centésimas (app).
 
 ## Reglas del autor
 

@@ -12,7 +12,9 @@ import 'data/ranking_backend.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // Solo vertical.
-  await SystemChrome.setPreferredOrientations(const [DeviceOrientation.portraitUp]);
+  await SystemChrome.setPreferredOrientations(const [
+    DeviceOrientation.portraitUp,
+  ]);
   final prefs = await SharedPreferences.getInstance();
 
   RankingBackend? backend;

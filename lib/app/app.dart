@@ -12,7 +12,7 @@ class SevenApp extends ConsumerWidget {
     return MaterialApp.router(
       title: 'SEVEN',
       debugShowCheckedModeBanner: false,
-      theme: buildTheme(SevenPalette.normal),
+      theme: buildTheme(),
       routerConfig: ref.watch(routerProvider),
     );
   }

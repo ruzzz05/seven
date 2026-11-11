@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:seven_engine/seven_engine.dart';
-import 'package:flutter/services.dart';
 
-import '../../app/assets.dart';
-import '../../app/pixel_widgets.dart';
+import '../../app/c6.dart';
 import '../../app/providers.dart';
 import '../../data/ranking_backend.dart';
+import '../../ui/c6_widgets.dart';
 import '../game/game_notifier.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -31,98 +31,118 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   Widget build(BuildContext context) {
     final nick = ref.watch(nicknameProvider);
     return Scaffold(
-      body: DecoratedBox(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage(Assets.fondo),
-            repeat: ImageRepeat.repeat,
-            filterQuality: FilterQuality.none,
-          ),
-        ),
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(24),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+      body: C6Page(
+        padding: const EdgeInsets.fromLTRB(32, 56, 32, 32),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              'SEVEN',
+              textAlign: TextAlign.center,
+              style: C6.style(56, weight: FontWeight.w700),
+            ),
+            const SizedBox(height: 12),
+            Text(
+              'llega a 7 con cuatro números',
+              textAlign: TextAlign.center,
+              style: C6.style(12, color: C6.muted),
+            ),
+            const SizedBox(height: 40),
+            C6Key(
+              height: 88,
+              face: C6.accent,
+              faceBorder: C6.accent,
+              canto: C6.accentSide,
+              semanticLabel: 'Jugar en modo normal',
+              onTap: () => context.push('/game/${GameMode.normal.name}'),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'normal',
+                    style: C6.style(
+                      20,
+                      weight: FontWeight.w700,
+                      color: C6.onAccent,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    'con ceros y convertir',
+                    style: C6.style(10, color: C6.onAccent),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: C6.gap + 6),
+            C6Key(
+              height: 88,
+              semanticLabel: 'Jugar en modo hardcore',
+              onTap: () => context.push('/game/${GameMode.hardcore.name}'),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'hardcore',
+                    style: C6.style(20, weight: FontWeight.w700),
+                  ),
+                  const SizedBox(height: 6),
+                  Text('sin ceros', style: C6.style(10, color: C6.muted)),
+                ],
+              ),
+            ),
+            const SizedBox(height: 22),
+            Row(
               children: [
-                SizedBox(
-                  height: 80,
-                  child: Image.asset(
-                    Assets.titleSeven,
-                    filterQuality: FilterQuality.none,
-                    fit: BoxFit.contain,
-                  ),
-                ),
-                if (nick != null)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 12),
+                Expanded(
+                  child: C6Key(
+                    height: 52,
+                    semanticLabel: 'Ranking mundial',
+                    onTap: () => context.push('/ranking'),
                     child: Text(
-                      'JUGADOR: $nick',
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        fontFamily: Assets.fontPixel,
-                        fontSize: 12,
-                      ),
+                      'ranking',
+                      style: C6.style(14, weight: FontWeight.w500),
                     ),
                   ),
-                const SizedBox(height: 40),
-                PixelButton(
-                  label: 'JUGAR NORMAL',
-                  height: 56,
-                  fontSize: 16,
-                  onTap: () => context.push('/game/${GameMode.normal.name}'),
                 ),
-                const SizedBox(height: 16),
-                PixelButton(
-                  label: 'JUGAR HARDCORE',
-                  height: 56,
-                  fontSize: 16,
-                  face: const Color(0xFF910000),
-                  textColor: const Color(0xFFFFFFFF),
-                  onTap: () => context.push('/game/${GameMode.hardcore.name}'),
-                ),
-                const SizedBox(height: 24),
-                Row(
-                  children: [
-                    Expanded(
-                      child: PixelButton(
-                        label: 'RANKING',
-                        height: 48,
-                        onTap: () => context.push('/ranking'),
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    SpriteButton(
-                      asset: Assets.btnAyuda,
-                      semantics: 'Ayuda',
-                      onTap: () => context.push('/help'),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                Align(
-                  child: SpriteButton(
-                    asset: Assets.btnSalir,
-                    semantics: 'Salir',
-                    onTap: () => SystemNavigator.pop(),
-                  ),
-                ),
-                if (!AppConfig.backendEnabled)
-                  const Padding(
-                    padding: EdgeInsets.only(top: 16),
+                const SizedBox(width: C6.gap),
+                Expanded(
+                  child: C6Key(
+                    height: 52,
+                    semanticLabel: 'Ayuda',
+                    onTap: () => context.push('/help'),
                     child: Text(
-                      'MODO OFFLINE: SIN RANKING MUNDIAL',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontFamily: Assets.fontPixel,
-                        fontSize: 10,
-                      ),
+                      'ayuda',
+                      style: C6.style(14, weight: FontWeight.w500),
                     ),
                   ),
+                ),
               ],
             ),
-          ),
+            const SizedBox(height: 26),
+            Center(
+              child: Text(
+                nick == null ? '' : 'jugador: $nick',
+                style: C6.style(11, color: C6.muted),
+              ),
+            ),
+            if (!AppConfig.backendEnabled)
+              Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: Center(
+                  child: Text(
+                    'sin conexión: sin ranking mundial',
+                    style: C6.style(10, color: C6.muted),
+                  ),
+                ),
+              ),
+            Center(
+              child: TextButton(
+                onPressed: () => SystemNavigator.pop(),
+                child: Text('salir', style: C6.style(12, color: C6.muted)),
+              ),
+            ),
+          ],
         ),
       ),
     );

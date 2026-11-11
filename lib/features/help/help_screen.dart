@@ -1,73 +1,56 @@
 import 'package:flutter/material.dart';
 
-import '../../app/assets.dart';
+import '../../app/c6.dart';
 
 class HelpScreen extends StatelessWidget {
   const HelpScreen({super.key});
 
   static const _sections = <(String, String)>[
     (
-      'Objetivo',
-      'Deja un único número y que sea 7. Si el último número no es 7, pierdes.',
+      'objetivo',
+      'deja un único número y que sea 7. si el último número no es 7, pierdes.',
     ),
     (
-      'Operaciones',
-      'Pulsa +, −, × o ÷. Después toca dos números: el primero y el segundo. '
-          'La operación se ejecuta sola al tocar el segundo.',
+      'operaciones',
+      'pulsa +, −, × o ÷ y luego toca dos números. la operación se ejecuta al tocar el segundo.',
     ),
     (
-      'Resultados',
-      'El resultado se escribe en las celdas de los dos números. '
-          'Las celdas vacías se muestran con "-" y se acumulan a la izquierda.',
+      'resultados',
+      'el resultado se reparte en las celdas. las vacías se acumulan a la izquierda.',
     ),
     (
-      'No permitido',
-      'Resultados negativos y divisiones no exactas. El movimiento no cambia '
-          'nada y la partida sigue.',
+      'no permitido',
+      'división no exacta o entre cero. el movimiento no cambia nada.',
     ),
     (
-      'Normal: ceros',
-      'Si aparece un 0, pulsa CONVERTIR y elige un número del 1 al 9. '
-          'Todos los ceros cambian a ese número.',
+      'normal · ceros',
+      'si aparece un 0, pulsa convertir ceros y elige un número del 1 al 9. todos los ceros cambian.',
     ),
     (
-      'Hardcore',
-      'Igual que Normal, pero sin ceros y sin CONVERTIR. '
-          'Un resultado que sea solo 0 no se permite.',
+      'hardcore',
+      'igual que normal, pero sin ceros y sin convertir. un resultado que sea solo 0 no se permite.',
     ),
     (
-      'Puntuación',
-      'El cronómetro empieza con tu primer toque. Ganas en menos tiempo, '
-          'mejor posición en el ranking.',
+      'puntuación',
+      'el cronómetro empieza con tu primer toque. ganas en menos tiempo, mejor posición.',
     ),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Ayuda')),
+      appBar: AppBar(title: Text('ayuda', style: C6.style(16))),
       body: ListView(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.fromLTRB(22, 12, 22, 32),
         children: [
-          Center(
-            child: SizedBox(
-              height: 216,
-              child: Image.asset(
-                Assets.helpPaper,
-                filterQuality: FilterQuality.none,
-              ),
-            ),
-          ),
-          const SizedBox(height: 16),
           for (final (title, body) in _sections) ...[
             Text(
               title,
-              style: Theme.of(context).textTheme.titleMedium
-                  ?.copyWith(fontWeight: FontWeight.w800),
+              style: C6.style(13, weight: FontWeight.w700, color: C6.accent),
             ),
-            const SizedBox(height: 4),
-            Text(body),
-            const SizedBox(height: 16),
+            const SizedBox(height: 6),
+            Text(body, style: C6.style(13, color: C6.text)),
+            const SizedBox(height: 22),
           ],
         ],
       ),

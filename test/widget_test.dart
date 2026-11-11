@@ -16,8 +16,8 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
-    expect(find.text('JUGAR NORMAL'), findsOneWidget);
-    expect(find.text('JUGAR HARDCORE'), findsOneWidget);
+    expect(find.text('normal'), findsOneWidget);
+    expect(find.text('hardcore'), findsOneWidget);
   });
 
   testWidgets('sin apodo redirige a onboarding', (tester) async {
@@ -30,6 +30,6 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
-    expect(find.text('Elige tu apodo'), findsOneWidget);
+    expect(find.text('tu apodo'), findsOneWidget);
   });
 }

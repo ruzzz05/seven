@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:seven_engine/seven_engine.dart';
 
-import '../../app/assets.dart';
-import '../../app/pixel_widgets.dart';
+import '../../app/c6.dart';
 import '../../app/providers.dart';
-import '../../app/theme.dart';
 import '../../data/ranking_backend.dart';
+import '../../ui/c6_widgets.dart';
 import '../common/format.dart';
 
 final leaderboardProvider = FutureProvider.autoDispose
@@ -28,89 +27,83 @@ class _RankingScreenState extends ConsumerState<RankingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final palette = SevenPalette.normal;
     final backendOn = ref.watch(rankingBackendProvider) != null;
 
     Widget body;
     if (!backendOn) {
-      body = const Center(
+      body = Center(
         child: Text(
-          'RANKING NO DISPONIBLE SIN CONEXIÓN CONFIGURADA.',
+          'ranking no disponible sin conexión configurada',
           textAlign: TextAlign.center,
-          style: TextStyle(fontFamily: Assets.fontPixel, fontSize: 12),
+          style: C6.style(12, color: C6.muted),
         ),
       );
     } else {
       body = ref
           .watch(leaderboardProvider(_mode))
           .when(
-            loading: () => const Center(child: CircularProgressIndicator()),
+            loading: () => const Center(
+              child: CircularProgressIndicator(color: C6.accent),
+            ),
             error: (e, _) => Center(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Text(
-                    'SIN CONEXIÓN.',
-                    style: TextStyle(fontFamily: Assets.fontPixel),
-                  ),
-                  const SizedBox(height: 12),
-                  PixelButton(
-                    label: 'REINTENTAR',
+                  Text('sin conexión', style: C6.style(13)),
+                  const SizedBox(height: 14),
+                  C6Key(
+                    width: 180,
+                    height: 48,
                     onTap: () => ref.invalidate(leaderboardProvider(_mode)),
+                    child: Text(
+                      'reintentar',
+                      style: C6.style(13, weight: FontWeight.w500),
+                    ),
                   ),
                 ],
               ),
             ),
             data: (rows) => rows.isEmpty
-                ? const Center(
+                ? Center(
                     child: Text(
-                      'AÚN NO HAY TIEMPOS. ¡SÉ EL PRIMERO!',
+                      'aún no hay tiempos. sé el primero',
                       textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontFamily: Assets.fontPixel,
-                        fontSize: 12,
-                      ),
+                      style: C6.style(12, color: C6.muted),
                     ),
                   )
-                : ListView.builder(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                : ListView.separated(
+                    padding: EdgeInsets.zero,
                     itemCount: rows.length,
+                    separatorBuilder: (_, _) => const Divider(
+                      height: 1,
+                      thickness: 1,
+                      color: C6.border,
+                    ),
                     itemBuilder: (_, k) {
                       final r = rows[k];
                       return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 4),
-                        child: LcdPanel(
-                          child: Row(
-                            children: [
-                              Text(
-                                '#${r.position}',
-                                style: TextStyle(
-                                  fontFamily: Assets.fontPixel,
-                                  fontSize: 16,
-                                  color: palette.accent,
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        child: Row(
+                          children: [
+                            SizedBox(
+                              width: 44,
+                              child: Text(
+                                '${r.position}',
+                                style: C6.style(
+                                  15,
+                                  weight: FontWeight.w700,
+                                  color: C6.accent,
                                 ),
                               ),
-                              const SizedBox(width: 12),
-                              Expanded(
-                                child: Text(
-                                  r.nickname,
-                                  style: const TextStyle(
-                                    fontFamily: Assets.fontPixel,
-                                    fontSize: 16,
-                                    color: Color(0xFFFFFFFF),
-                                  ),
-                                ),
-                              ),
-                              Text(
-                                formatMs(r.timeMs),
-                                style: TextStyle(
-                                  fontFamily: Assets.fontPixel,
-                                  fontSize: 16,
-                                  color: palette.accent,
-                                ),
-                              ),
-                            ],
-                          ),
+                            ),
+                            Expanded(
+                              child: Text(r.nickname, style: C6.style(15)),
+                            ),
+                            Text(
+                              formatMs(r.timeMs),
+                              style: C6.style(15, color: C6.text),
+                            ),
+                          ],
                         ),
                       );
                     },
@@ -119,62 +112,55 @@ class _RankingScreenState extends ConsumerState<RankingScreen> {
     }
 
     return Scaffold(
-      body: DecoratedBox(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage(Assets.fondo),
-            repeat: ImageRepeat.repeat,
-            filterQuality: FilterQuality.none,
-          ),
-        ),
-        child: SafeArea(
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(22, 46, 22, 28),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: Row(
-                  children: [
-                    PixelButton(
-                      label: '<',
-                      width: 48,
-                      height: 48,
-                      onTap: () => Navigator.of(context).maybePop(),
-                    ),
-                    const SizedBox(width: 12),
-                    const Expanded(
-                      child: Text(
-                        'RANKING MUNDIAL',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontFamily: Assets.fontPixel,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 60),
-                  ],
-                ),
+              Row(
+                children: [
+                  C6Key(
+                    width: 44,
+                    height: 44,
+                    semanticLabel: 'Volver',
+                    onTap: () => Navigator.of(context).maybePop(),
+                    child: const Icon(Icons.chevron_left, color: C6.text),
+                  ),
+                  const Spacer(),
+                  Text('ranking', style: C6.style(16)),
+                  const Spacer(),
+                  const SizedBox(width: 44),
+                ],
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Row(
-                  children: [
-                    for (final m in GameMode.values)
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 4),
-                          child: PixelButton(
-                            label: m == GameMode.normal ? 'NORMAL' : 'HARDCORE',
-                            height: 44,
-                            face: _mode == m ? palette.accent : null,
-                            onTap: () => setState(() => _mode = m),
+              const SizedBox(height: 26),
+              Row(
+                children: [
+                  for (final m in GameMode.values)
+                    Expanded(
+                      child: Padding(
+                        padding: EdgeInsets.only(
+                          right: m == GameMode.normal ? C6.gap : 0,
+                        ),
+                        child: C6Key(
+                          height: 44,
+                          active: _mode == m,
+                          semanticLabel: 'Modo ${m.name}',
+                          onTap: () => setState(() => _mode = m),
+                          child: Text(
+                            m.name,
+                            style: C6.style(
+                              13,
+                              weight: FontWeight.w500,
+                              color: _mode == m ? C6.onAccent : C6.text,
+                            ),
                           ),
                         ),
                       ),
-                  ],
-                ),
+                    ),
+                ],
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 18),
               Expanded(child: body),
             ],
           ),

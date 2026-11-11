@@ -1,203 +1,81 @@
 import 'package:flutter/material.dart';
 import 'package:seven_engine/seven_engine.dart';
 
-import '../../app/assets.dart';
-import '../../app/pixel_widgets.dart';
-import '../../app/theme.dart';
+import '../../app/c6.dart';
+import '../../ui/c6_widgets.dart';
 
-/// Imagen de pixel art sin suavizado.
-Widget pixelImage(
-  String asset, {
-  double? width,
-  double? height,
-  BoxFit fit = BoxFit.contain,
-}) => Image.asset(
-  asset,
-  width: width,
-  height: height,
-  fit: fit,
-  filterQuality: FilterQuality.none,
-);
+/// Símbolo de operación en la tecla.
+String opSymbol(Op op) => switch (op) {
+  Op.add => '+',
+  Op.sub => '−',
+  Op.mul => '×',
+  Op.div => '÷',
+};
 
-/// Ficha del tablero: celda blanca de la beta, o metal si está vacía.
-class CellTile extends StatelessWidget {
-  const CellTile({
-    super.key,
-    required this.index,
-    required this.value,
-    required this.palette,
-    required this.selected,
-    required this.flash,
-    required this.onTap,
-  });
-
-  final int index;
-  final int? value;
-  final SevenPalette palette;
-  final bool selected;
-  final bool flash;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final empty = value == null;
-    return Semantics(
-      label: empty
-          ? 'Celda ${index + 1}, vacía'
-          : 'Celda ${index + 1}, valor $value',
-      button: !empty,
-      child: GestureDetector(
-        onTap: empty ? null : onTap,
-        child: SizedBox(
-          height: 96,
-          child: Stack(
-            fit: StackFit.expand,
-            children: [
-              pixelImage(
-                empty ? Assets.cellEmpty : Assets.cellBg,
-                fit: BoxFit.fill,
-              ),
-              if (flash)
-                ColoredBox(color: palette.danger.withValues(alpha: 0.85)),
-              if (selected) pixelImage(Assets.border, fit: BoxFit.fill),
-              Center(
-                child: Text(
-                  value?.toString() ?? '-',
-                  style: TextStyle(
-                    fontFamily: Assets.fontPixel,
-                    fontSize: 40,
-                    color: empty ? palette.text : const Color(0xFF1C1C1C),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-/// Botón de operación. +, − y × usan los sprites de la beta. ÷ no tiene
-/// sprite en la beta, así que se dibuja con el mismo bisel metálico.
+/// Tecla de operación: 64 de alto, símbolo 26/700. La activa usa el acento.
 class OpButton extends StatelessWidget {
   const OpButton({
     super.key,
     required this.op,
-    required this.palette,
     required this.active,
-    required this.enabled,
     required this.onTap,
   });
 
   final Op op;
-  final SevenPalette palette;
   final bool active;
-  final bool enabled;
   final VoidCallback onTap;
-
-  static String? asset(Op op) => switch (op) {
-    Op.add => Assets.btnSuma,
-    Op.sub => Assets.btnResta,
-    Op.mul => Assets.btnMult,
-    Op.div => null,
-  };
 
   @override
   Widget build(BuildContext context) {
-    final img = asset(op);
-    final content = img != null
-        ? Opacity(
-            opacity: enabled ? 1 : 0.4,
-            child: pixelImage(img, fit: BoxFit.contain),
-          )
-        : Stack(
-            alignment: Alignment.center,
-            children: [
-              PixelButton(
-                label: '',
-                height: 56,
-                enabled: enabled,
-                onTap: onTap,
-              ),
-              const IgnorePointer(
-                child: CustomPaint(size: Size(32, 32), painter: _DivideGlyph()),
-              ),
-            ],
-          );
-    return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.all(4),
-        child: Semantics(
-          button: true,
-          selected: active,
-          label: 'Operación ${op.name}',
-          child: GestureDetector(
-            onTap: img != null && enabled ? onTap : null,
-            child: Container(
-              height: 56,
-              decoration: active
-                  ? BoxDecoration(
-                      border: Border.all(color: palette.accent, width: kPixel),
-                    )
-                  : null,
-              child: content,
-            ),
-          ),
+    return C6Key(
+      key: ValueKey('op-${op.code}'),
+      active: active,
+      semanticLabel: 'Operación ${op.name}',
+      onTap: onTap,
+      child: Text(
+        opSymbol(op),
+        style: C6.style(
+          26,
+          weight: FontWeight.w700,
+          color: active ? C6.onAccent : C6.text,
         ),
       ),
     );
   }
 }
 
-/// Panel 1–9 que aparece solo al pulsar Convertir (modo Normal).
+/// Panel 1–9 para convertir ceros. Se abre como hoja inferior.
 class DigitPad extends StatelessWidget {
-  const DigitPad({super.key, required this.palette, required this.onPick});
+  const DigitPad({super.key, required this.onPick});
 
-  final SevenPalette palette;
   final ValueChanged<int> onPick;
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.fromLTRB(22, 20, 22, 24),
         child: Column(
           mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text(
-              'CONVERTIR CEROS EN:',
-              style: TextStyle(
-                fontFamily: Assets.fontPixel,
-                color: palette.accent,
-                fontSize: 16,
-              ),
-            ),
-            const SizedBox(height: 12),
+            Text('convertir ceros en', style: C6.style(13, color: C6.muted)),
+            const SizedBox(height: 14),
             GridView.count(
               shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
               crossAxisCount: 3,
-              mainAxisSpacing: 8,
-              crossAxisSpacing: 8,
+              mainAxisSpacing: C6.gap,
+              crossAxisSpacing: C6.gap,
+              childAspectRatio: 1.6,
               children: [
                 for (var d = 1; d <= 9; d++)
-                  GestureDetector(
+                  C6Key(
+                    semanticLabel: 'Convertir en $d',
                     onTap: () => onPick(d),
-                    child: Stack(
-                      fit: StackFit.expand,
-                      children: [
-                        pixelImage(Assets.cellBg, fit: BoxFit.fill),
-                        Center(
-                          child: Text(
-                            '$d',
-                            style: const TextStyle(
-                              fontFamily: Assets.fontPixel,
-                              fontSize: 28,
-                              color: Color(0xFF1C1C1C),
-                            ),
-                          ),
-                        ),
-                      ],
+                    child: Text(
+                      '$d',
+                      style: C6.style(26, weight: FontWeight.w700),
                     ),
                   ),
               ],
@@ -207,27 +85,4 @@ class DigitPad extends StatelessWidget {
       ),
     );
   }
-}
-
-/// Símbolo ÷ dibujado en bloques pixel (la beta no tiene sprite para él).
-class _DivideGlyph extends CustomPainter {
-  const _DivideGlyph();
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = const Color(0xFF1C1C1C)
-      ..isAntiAlias = false;
-    final cx = size.width / 2;
-    final cy = size.height / 2;
-    canvas.drawRect(Rect.fromLTWH(cx - 12, cy - 2, 24, 4), paint); // barra
-    canvas.drawRect(
-      Rect.fromLTWH(cx - 2, cy - 12, 4, 4),
-      paint,
-    ); // punto arriba
-    canvas.drawRect(Rect.fromLTWH(cx - 2, cy + 8, 4, 4), paint); // punto abajo
-  }
-
-  @override
-  bool shouldRepaint(_DivideGlyph old) => false;
 }
