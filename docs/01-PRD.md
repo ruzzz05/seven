@@ -39,7 +39,7 @@ Jugador casual y speedrunner de puzzles que busca mejorar su tiempo y compararlo
 
 Operaciones: `+`, `−`, `×`, `÷`.
 
-Flujo: pulsar el botón de operación → pulsar dos celdas con número. El primer toque es el operando izquierdo (`a`), el segundo el derecho (`b`). Para `−` y `÷`, el resultado es `a op b`. No hay botón de igual: al seleccionar la segunda celda la operación se ejecuta automáticamente.
+Flujo: pulsar el botón de operación → pulsar dos celdas con número. El orden de los dos toques no cambia el resultado: la resta es `|a − b|` y la división es `mayor ÷ menor` (debe ser exacta y el menor no puede ser 0). No hay botón de igual: al seleccionar la segunda celda la operación se ejecuta automáticamente.
 
 Resultado:
 1. Se calcula `r = a op b`.
@@ -93,7 +93,7 @@ Ejemplos (normativos):
 |----|-----------|-----------|
 | RF-01 | Generar tablero inicial de 4 dígitos 1–9 | Alta |
 | RF-02 | Ejecutar `+ − × ÷` sobre dos celdas según 4.2 | Alta |
-| RF-03 | Rechazar negativos y divisiones no exactas sin cambiar el tablero | Alta |
+| RF-03 | Resta siempre en valor absoluto; rechazar divisiones no exactas sin cambiar el tablero | Alta |
 | RF-04 | Alinear tablero a la derecha y mostrar `-` | Alta |
 | RF-05 | Modo Normal: conservar 0 en resultados | Alta |
 | RF-06 | Modo Normal: botón Convertir y panel 1–9 que cambia todos los 0 | Alta |

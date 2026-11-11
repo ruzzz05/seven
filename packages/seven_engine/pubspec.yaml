@@ -1,0 +1,13 @@
+name: seven_engine
+description: "Motor de reglas de SEVEN (Dart puro)."
+version: 1.0.0
+publish_to: 'none'
+
+environment:
+  sdk: ^3.13.4
+
+dependencies: {}
+
+dev_dependencies:
+  test: ^1.25.0
+  lints: ^5.0.0

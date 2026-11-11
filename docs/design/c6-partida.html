@@ -1,0 +1,60 @@
+<!doctype html><html><head><meta charset='utf-8'>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap">
+<style>
+body { margin: 0; }
+.t { --bg:#0A0A0A; --panel:#161616; --border:#2C2C2C; --deep:#000000; --text:#F5F5F5; --muted:#8A8A8A; --digit:#F5F5F5; --sel:#D4FF3A; --selside:#8FB01A; --seld:#0A0A0A; --ring:rgba(212,255,58,.18); --act:#D4FF3A; --actt:#0A0A0A; --actside:#8FB01A; --meta:#D4FF3A; --metat:#0A0A0A; --cta:#F5F5F5; --ctat:#0A0A0A; --ctaside:#A8A8A8; --danger:#FF6B6B; }
+.root { width: 390px; height: 844px; box-sizing: border-box; padding: 46px 22px 28px; background: var(--bg); color: var(--text); font-family: 'JetBrains Mono', monospace; display: flex; flex-direction: column; }
+.b { border: 0; padding: 0; margin: 0; font: inherit; color: inherit; background: none; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.cap { background: var(--panel); border: 1px solid var(--border); border-bottom: 5px solid var(--deep); border-radius: 12px; box-sizing: border-box; }
+.pill { padding: 6px 14px; border: 1px solid var(--border); border-radius: 20px; font-size: 13px; }
+.lbl { font-size: 11px; color: var(--muted); }
+.timer { margin-top: 4px; font-size: 52px; font-weight: 700; line-height: 1; letter-spacing: -1px; }
+.meta { width: 52px; height: 52px; border-radius: 12px; background: var(--meta); color: var(--metat); display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: 700; }
+.tile { height: 104px; border-radius: 14px; background: var(--panel); border: 1px solid var(--border); border-bottom: 7px solid var(--deep); box-sizing: border-box; font-size: 44px; font-weight: 700; color: var(--digit); }
+.tile.sel { background: var(--sel); border-color: var(--sel); border-bottom-color: var(--selside); color: var(--seld); transform: translateY(-10px); box-shadow: 0 0 0 4px var(--ring); }
+.tile.empty { background: none; border: 1.5px dashed var(--border); color: var(--muted); font-size: 26px; font-weight: 400; display: flex; align-items: center; justify-content: center; }
+.op { height: 64px; font-size: 26px; font-weight: 700; }
+.op.act { background: var(--act); color: var(--actt); border: 0; border-bottom: 2px solid var(--actside); border-radius: 12px; box-sizing: border-box; transform: translateY(3px); }
+.cta { height: 58px; border-radius: 12px; background: var(--cta); color: var(--ctat); border-bottom: 5px solid var(--ctaside); box-sizing: border-box; font-size: 15px; font-weight: 700; }
+.dot { width: 10px; height: 10px; border-radius: 3px; background: var(--act); }
+.dot.off { background: none; border: 1.5px solid var(--muted); box-sizing: border-box; }
+</style>
+</head><body>
+
+<div class="root t">
+  <div style="display: flex; justify-content: space-between; align-items: center;">
+    <button class="b cap" aria-label="Volver" style="width: 44px; height: 44px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+    <div class="pill">normal</div>
+    <div class="lbl" style="text-align: right; line-height: 1.5;">mejor<br>00:09.1</div>
+  </div>
+
+  <div style="margin-top: 34px; display: flex; justify-content: space-between; align-items: flex-end;">
+    <div><div class="lbl">tiempo</div><div class="timer">00:12.4</div></div>
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 6px;"><div class="lbl">meta</div><div class="meta">7</div></div>
+  </div>
+
+  <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 22px;">
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
+      <div class="tile empty">–</div>
+      <button class="b tile">0</button>
+      <button class="b tile sel">3</button>
+      <button class="b tile">5</button>
+    </div>
+    <div class="lbl" style="display: flex; align-items: center; justify-content: center; gap: 7px;">
+      <span class="dot off"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span style="margin-left: 8px;">quedan 3</span>
+    </div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
+    <button class="b op act" aria-label="Sumar">+</button>
+    <button class="b cap op" aria-label="Restar">−</button>
+    <button class="b cap op" aria-label="Multiplicar">×</button>
+    <button class="b cap op" aria-label="Dividir">÷</button>
+  </div>
+
+  <div style="margin-top: 20px; display: grid; grid-template-columns: 1fr 58px; gap: 10px;">
+    <button class="b cta">convertir ceros</button>
+    <button class="b cap" aria-label="Reiniciar" style="height: 58px; color: var(--danger);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg></button>
+  </div>
+</div>
+</body></html>

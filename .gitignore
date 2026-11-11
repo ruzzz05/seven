@@ -1,5 +1,33 @@
+# Binarios y artefactos de la beta (no versionar)
 *.apk
+*.aab
+
+# Flutter / Dart
 .dart_tool/
 build/
-.idea/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+coverage/
 *.iml
+.idea/
+.vscode/
+
+# Firma Android (nunca subir)
+*.jks
+*.keystore
+key.properties
+android/key.properties
+
+# Supabase CLI
+supabase/.branches
+supabase/.temp
+.env
+.env.*
+!.env.example
+
+# Sistema
+.DS_Store
+Thumbs.db

@@ -1,0 +1,167 @@
+{
+  "cases": [
+    {
+      "name": "mul 3x5 -> 15 (normal)",
+      "mode": "normal",
+      "board": [null, null, 3, 5],
+      "move": {"type": "op", "op": "mul", "i": 2, "j": 3},
+      "expect": {"result": "ok", "board": [null, null, 1, 5]}
+    },
+    {
+      "name": "add 2+3 -> 5 deja celda derecha vacía y alinea",
+      "mode": "normal",
+      "board": [null, null, 2, 3],
+      "move": {"type": "op", "op": "add", "i": 2, "j": 3},
+      "expect": {"result": "ok", "board": [null, null, null, 5]}
+    },
+    {
+      "name": "mul 4x5 -> 20 conserva 0 (normal)",
+      "mode": "normal",
+      "board": [null, null, 4, 5],
+      "move": {"type": "op", "op": "mul", "i": 2, "j": 3},
+      "expect": {"result": "ok", "board": [null, null, 2, 0]}
+    },
+    {
+      "name": "mul 4x5 -> 20 descarta 0 (hardcore)",
+      "mode": "hardcore",
+      "board": [null, null, 4, 5],
+      "move": {"type": "op", "op": "mul", "i": 2, "j": 3},
+      "expect": {"result": "ok", "board": [null, null, null, 2]}
+    },
+    {
+      "name": "sub 3 y 5 en orden 3-5 da 2 (orden irrelevante)",
+      "mode": "normal",
+      "board": [null, null, 3, 5],
+      "move": {"type": "op", "op": "sub", "i": 2, "j": 3},
+      "expect": {"result": "ok", "board": [null, null, null, 2]}
+    },
+    {
+      "name": "sub 3 y 5 en orden 5-3 da 2 (orden irrelevante)",
+      "mode": "normal",
+      "board": [null, null, 3, 5],
+      "move": {"type": "op", "op": "sub", "i": 3, "j": 2},
+      "expect": {"result": "ok", "board": [null, null, null, 2]}
+    },
+    {
+      "name": "div 2 y 8 en orden 2-8 da 4 (orden irrelevante)",
+      "mode": "normal",
+      "board": [null, null, 2, 8],
+      "move": {"type": "op", "op": "div", "i": 2, "j": 3},
+      "expect": {"result": "ok", "board": [null, null, null, 4]}
+    },
+    {
+      "name": "div 2 y 8 en orden 8-2 da 4 (orden irrelevante)",
+      "mode": "normal",
+      "board": [null, null, 2, 8],
+      "move": {"type": "op", "op": "div", "i": 3, "j": 2},
+      "expect": {"result": "ok", "board": [null, null, null, 4]}
+    },
+    {
+      "name": "div 3 y 5 no exacta en ningún orden: inválido",
+      "mode": "normal",
+      "board": [null, null, 3, 5],
+      "move": {"type": "op", "op": "div", "i": 2, "j": 3},
+      "expect": {"result": "invalid", "reason": "inexactDivision"}
+    },
+    {
+      "name": "div con cero en cualquier orden: inválido",
+      "mode": "normal",
+      "board": [null, null, 0, 7],
+      "move": {"type": "op", "op": "div", "i": 3, "j": 2},
+      "expect": {"result": "invalid", "reason": "inexactDivision"}
+    },
+    {
+      "name": "div 7/2 no exacta: inválido",
+      "mode": "normal",
+      "board": [null, null, 7, 2],
+      "move": {"type": "op", "op": "div", "i": 2, "j": 3},
+      "expect": {"result": "invalid", "reason": "inexactDivision"}
+    },
+    {
+      "name": "div entre cero: inválido",
+      "mode": "normal",
+      "board": [null, null, 7, 0],
+      "move": {"type": "op", "op": "div", "i": 2, "j": 3},
+      "expect": {"result": "invalid", "reason": "inexactDivision"}
+    },
+    {
+      "name": "div 8/2 = 4 exacta",
+      "mode": "normal",
+      "board": [null, null, 8, 2],
+      "move": {"type": "op", "op": "div", "i": 2, "j": 3},
+      "expect": {"result": "ok", "board": [null, null, null, 4]}
+    },
+    {
+      "name": "hardcore 3-3 = 0 queda sin dígitos: inválido",
+      "mode": "hardcore",
+      "board": [null, null, 3, 3],
+      "move": {"type": "op", "op": "sub", "i": 2, "j": 3},
+      "expect": {"result": "invalid", "reason": "zeroResultHardcore"}
+    },
+    {
+      "name": "normal 3-3 = 0 queda como 0",
+      "mode": "normal",
+      "board": [null, null, 3, 3],
+      "move": {"type": "op", "op": "sub", "i": 2, "j": 3},
+      "expect": {"result": "ok", "board": [null, null, null, 0]}
+    },
+    {
+      "name": "operar con celda vacía: inválido",
+      "mode": "normal",
+      "board": [null, 2, 3, 5],
+      "move": {"type": "op", "op": "add", "i": 0, "j": 2},
+      "expect": {"result": "invalid", "reason": "emptyCell"}
+    },
+    {
+      "name": "convert 0 -> 7 todos los ceros",
+      "mode": "normal",
+      "board": [null, 0, 4, 0],
+      "move": {"type": "convert", "digit": 7},
+      "expect": {"result": "ok", "board": [null, 7, 4, 7]}
+    },
+    {
+      "name": "convert sin ceros: inválido",
+      "mode": "normal",
+      "board": [null, null, 4, 5],
+      "move": {"type": "convert", "digit": 7},
+      "expect": {"result": "invalid", "reason": "convertNoZeros"}
+    },
+    {
+      "name": "convert en hardcore: inválido",
+      "mode": "hardcore",
+      "board": [null, null, 4, 0],
+      "move": {"type": "convert", "digit": 7},
+      "expect": {"result": "invalid", "reason": "convertNotAllowed"}
+    },
+    {
+      "name": "outcome: único 7 gana",
+      "mode": "normal",
+      "board": [null, null, null, 7],
+      "expect": {"outcome": "won"}
+    },
+    {
+      "name": "outcome: único 5 pierde",
+      "mode": "normal",
+      "board": [null, null, null, 5],
+      "expect": {"outcome": "lost"}
+    },
+    {
+      "name": "outcome: único 0 normal sigue",
+      "mode": "normal",
+      "board": [null, null, null, 0],
+      "expect": {"outcome": "ongoing"}
+    },
+    {
+      "name": "outcome: único 0 hardcore pierde",
+      "mode": "hardcore",
+      "board": [null, null, null, 0],
+      "expect": {"outcome": "lost"}
+    },
+    {
+      "name": "outcome: 2 números con suma válida sigue",
+      "mode": "hardcore",
+      "board": [null, null, 3, 5],
+      "expect": {"outcome": "ongoing"}
+    }
+  ]
+}
