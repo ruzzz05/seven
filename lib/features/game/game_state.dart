@@ -12,6 +12,7 @@ class GameState {
     required this.board,
     this.pendingOp,
     this.firstIndex,
+    this.secondIndex,
     this.flash = const {},
     this.moves = const [],
     this.elapsedMs = 0,
@@ -34,6 +35,7 @@ class GameState {
   final Board board;
   final Op? pendingOp;
   final int? firstIndex;
+  final int? secondIndex;
   final Set<int> flash;
   final List<Move> moves;
   final int elapsedMs;
@@ -50,6 +52,8 @@ class GameState {
     Op? pendingOp,
     bool clearPendingOp = false,
     int? firstIndex,
+    int? secondIndex,
+    bool clearSecond = false,
     bool clearFirst = false,
     Set<int>? flash,
     List<Move>? moves,
@@ -68,6 +72,7 @@ class GameState {
       board: board ?? this.board,
       pendingOp: clearPendingOp ? null : (pendingOp ?? this.pendingOp),
       firstIndex: clearFirst ? null : (firstIndex ?? this.firstIndex),
+      secondIndex: clearSecond ? null : (secondIndex ?? this.secondIndex),
       flash: flash ?? this.flash,
       moves: moves ?? this.moves,
       elapsedMs: elapsedMs ?? this.elapsedMs,

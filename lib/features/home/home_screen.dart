@@ -24,6 +24,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     // Reintenta envíos pendientes de partidas anteriores.
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(gameProvider.notifier).retryPending();
+      ref.read(nicknameProvider.notifier).syncRemote();
     });
   }
 

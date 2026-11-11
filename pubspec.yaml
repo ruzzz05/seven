@@ -61,16 +61,8 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
-  assets:
-    - assets/images/
 
   fonts:
-    - family: PerfectDOSVGA437
-      fonts:
-        - asset: assets/fonts/PerfectDOSVGA437.ttf
-    - family: LiberationSans
-      fonts:
-        - asset: assets/fonts/LiberationSans.ttf
     - family: JetBrainsMono
       fonts:
         - asset: assets/fonts/JetBrainsMono-Regular.ttf

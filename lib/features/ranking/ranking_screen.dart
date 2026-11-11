@@ -28,6 +28,7 @@ class _RankingScreenState extends ConsumerState<RankingScreen> {
   @override
   Widget build(BuildContext context) {
     final backendOn = ref.watch(rankingBackendProvider) != null;
+    final me = ref.watch(nicknameProvider);
 
     Widget body;
     if (!backendOn) {
@@ -81,8 +82,26 @@ class _RankingScreenState extends ConsumerState<RankingScreen> {
                     ),
                     itemBuilder: (_, k) {
                       final r = rows[k];
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 14),
+                      final mine = r.nickname == me;
+                      final ink = mine ? C6.onAccent : C6.text;
+                      final accent = mine ? C6.onAccent : C6.accent;
+                      return Container(
+                        key: mine ? const ValueKey('mi-fila') : null,
+                        margin: mine
+                            ? const EdgeInsets.symmetric(vertical: 4)
+                            : EdgeInsets.zero,
+                        padding: EdgeInsets.symmetric(
+                          vertical: 14,
+                          horizontal: mine ? 12 : 0,
+                        ),
+                        decoration: mine
+                            ? BoxDecoration(
+                                color: C6.accent,
+                                borderRadius: BorderRadius.circular(
+                                  C6.radiusKey,
+                                ),
+                              )
+                            : null,
                         child: Row(
                           children: [
                             SizedBox(
@@ -92,16 +111,19 @@ class _RankingScreenState extends ConsumerState<RankingScreen> {
                                 style: C6.style(
                                   15,
                                   weight: FontWeight.w700,
-                                  color: C6.accent,
+                                  color: accent,
                                 ),
                               ),
                             ),
                             Expanded(
-                              child: Text(r.nickname, style: C6.style(15)),
+                              child: Text(
+                                r.nickname,
+                                style: C6.style(15, color: ink),
+                              ),
                             ),
                             Text(
                               formatMs(r.timeMs),
-                              style: C6.style(15, color: C6.text),
+                              style: C6.style(15, color: ink),
                             ),
                           ],
                         ),

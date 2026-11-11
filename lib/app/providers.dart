@@ -21,6 +21,19 @@ class NicknameNotifier extends Notifier<String?> {
   @override
   String? build() => ref.read(localStoreProvider).nickname;
 
+  /// Sube el apodo local al backend (idempotente). Cubre apodos elegidos
+  /// antes de que existiera el backend, que nunca llegaron al servidor.
+  Future<void> syncRemote() async {
+    final nick = state;
+    final backend = ref.read(rankingBackendProvider);
+    if (nick == null || backend == null) return;
+    try {
+      await backend.saveNickname(nick);
+    } catch (_) {
+      // Sin red: se reintentará al abrir la pantalla de inicio.
+    }
+  }
+
   Future<void> save(String nickname) async {
     await ref.read(localStoreProvider).setNickname(nickname);
     state = nickname;

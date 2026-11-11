@@ -148,7 +148,9 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                                       child: C6Ficha(
                                         index: i,
                                         value: game.board.cells[i],
-                                        selected: game.firstIndex == i,
+                                        selected:
+                                            game.firstIndex == i ||
+                                            game.secondIndex == i,
                                         onTap: game.board.cells[i] == null
                                             ? null
                                             : () => notifier.tapCell(i),

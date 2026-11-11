@@ -65,6 +65,8 @@ class GameNotifier extends Notifier<GameState> {
 
   // ---------------------------------------------------------------- taps
 
+  /// Operación: si ya hay dos números seleccionados, se ejecuta al momento.
+  /// Si no, queda pendiente hasta que se elijan los números.
   void tapOp(Op op) {
     if (!_canPlay) return;
     _startClock();
@@ -72,38 +74,76 @@ class GameNotifier extends Notifier<GameState> {
       state = state.copyWith(
         clearPendingOp: true,
         clearFirst: true,
+        clearSecond: true,
         hint: 'Elige una operación',
       );
       return;
     }
-    state = state.copyWith(
-      pendingOp: op,
-      hint: state.firstIndex == null
-          ? 'Elige el primer número'
-          : 'Elige el segundo número',
-    );
+    state = state.copyWith(pendingOp: op);
+    if (state.firstIndex != null && state.secondIndex != null) {
+      _executeSelected();
+    } else {
+      state = state.copyWith(
+        hint: state.firstIndex == null
+            ? 'Elige el primer número'
+            : 'Elige el segundo número',
+      );
+    }
   }
 
+  /// Números: hasta dos seleccionados (orden de toque). Con la operación ya
+  /// elegida, el segundo número ejecuta.
   void tapCell(int i) {
     if (!_canPlay) return;
     if (state.board.cells[i] == null) return;
     _startClock();
 
-    final op = state.pendingOp;
-    if (op == null) {
-      state = state.copyWith(hint: 'Elige primero una operación');
+    final first = state.firstIndex;
+    final second = state.secondIndex;
+    if (i == first) {
+      state = state.copyWith(
+        firstIndex: second,
+        clearFirst: second == null,
+        clearSecond: true,
+        hint: second == null ? 'Elige un número' : 'Elige el primer número',
+      );
       return;
     }
-    final first = state.firstIndex;
+    if (i == second) {
+      state = state.copyWith(
+        clearSecond: true,
+        hint: 'Elige el segundo número',
+      );
+      return;
+    }
     if (first == null) {
       state = state.copyWith(firstIndex: i, hint: 'Elige el segundo número');
       return;
     }
-    if (first == i) {
-      state = state.copyWith(clearFirst: true, hint: 'Elige el primer número');
-      return;
+    if (second == null) {
+      state = state.copyWith(secondIndex: i);
+    } else {
+      // Ya hay dos: la nueva sustituye a la más antigua.
+      state = state.copyWith(firstIndex: second, secondIndex: i);
     }
-    _play(OpMove(op, first, i));
+
+    if (state.pendingOp != null) {
+      _executeSelected();
+    } else {
+      state = state.copyWith(hint: 'Elige una operación');
+    }
+  }
+
+  void _executeSelected() {
+    final op = state.pendingOp!;
+    final a = state.firstIndex!;
+    final b = state.secondIndex!;
+    state = state.copyWith(
+      clearPendingOp: true,
+      clearFirst: true,
+      clearSecond: true,
+    );
+    _play(OpMove(op, a, b));
   }
 
   void openDigitPad() {

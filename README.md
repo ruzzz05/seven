@@ -96,7 +96,7 @@ docs/             documentación de diseño
 - Motor de reglas, juego, resultados, ranking y ayuda: implementados y con tests.
 - Backend: migración y Edge Functions escritas y verificadas por tipos y vectores. No desplegadas (requiere tu proyecto de Supabase).
 - Sin audio (igual que la beta).
-- Assets gráficos de la beta: importados desde `data.unity3d` (botones +, −, ×, C, reinicio, salir, ayuda; logo; paneles de victoria/derrota; celdas; papel de ayuda; fondo). Fuentes `PerfectDOSVGA437` y `LiberationSans`. Test `test/ui/assets_test.dart` verifica que todo asset referenciado exista.
+- Assets gráficos de la beta: retirados del repo (no se usan en el estilo C6).
 - Sin sprite en la beta: el botón ÷ (dibujado con bloques pixel), los botones de texto (Jugar, Ranking, Reintentar, Menú) que usan `PixelButton` con los colores de la beta.
 - Colores del modo Hardcore: la beta cambiaba el color del menú; el valor exacto no está en los assets, así que el tono actual es provisional.
 - Publicación en Google Play / App Store: pendiente (requiere tus cuentas y firma).

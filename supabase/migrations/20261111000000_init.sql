@@ -59,10 +59,10 @@ create or replace function public.get_leaderboard(
   p_limit  int default 100,
   p_offset int default 0
 )
-returns table (position bigint, nickname text, time_ms int, user_id uuid)
+returns table ("position" bigint, nickname text, time_ms int, user_id uuid)
 language sql stable security definer set search_path = public as $$
   select
-    row_number() over (order by bt.time_ms asc, bt.run_id asc) as position,
+    row_number() over (order by bt.time_ms asc, bt.run_id asc) as "position",
     bt.nickname,
     bt.time_ms,
     bt.user_id
@@ -73,17 +73,17 @@ language sql stable security definer set search_path = public as $$
 $$;
 
 create or replace function public.get_my_rank(p_mode public.game_mode)
-returns table (position bigint, time_ms int)
+returns table ("position" bigint, time_ms int)
 language sql stable security definer set search_path = public as $$
   with ranked as (
     select
-      row_number() over (order by bt.time_ms asc, bt.run_id asc) as position,
+      row_number() over (order by bt.time_ms asc, bt.run_id asc) as "position",
       bt.user_id,
       bt.time_ms
     from public.best_times bt
     where bt.mode = p_mode
   )
-  select position, time_ms from ranked where user_id = auth.uid();
+  select "position", time_ms from ranked where user_id = auth.uid();
 $$;
 
 -- ---------- Row Level Security ----------

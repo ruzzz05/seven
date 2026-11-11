@@ -83,12 +83,19 @@ void main() {
       expect(state().firstIndex, isNull);
     });
 
-    test('tocar celda sin operación pide elegir operación', () async {
-      await notifier().start(GameMode.normal, board: Board([null, null, 3, 5]));
-      notifier().tapCell(2);
-      expect(state().hint, 'Elige primero una operación');
-      expect(state().board, Board([null, null, 3, 5]));
-    });
+    test(
+      'tocar celda sin operación selecciona y pide el segundo número',
+      () async {
+        await notifier().start(
+          GameMode.normal,
+          board: Board([null, null, 3, 5]),
+        );
+        notifier().tapCell(2);
+        expect(state().firstIndex, 2);
+        expect(state().hint, 'Elige el segundo número');
+        expect(state().board, Board([null, null, 3, 5]));
+      },
+    );
   });
 
   group('fin de partida', () {
